@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
 interface InviteCodePageProps {
-  params: { inviteCode: string };
+  params: { inviteCode: string | null };
 }
 
 export default async function InviteCodePage({ params }: InviteCodePageProps) {
