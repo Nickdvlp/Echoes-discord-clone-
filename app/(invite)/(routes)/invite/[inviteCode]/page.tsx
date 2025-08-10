@@ -2,19 +2,16 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-interface PageParams {
-  inviteCode: string;
+interface InviteCodePageProps {
+  params: {
+    inviteCode: string;
+  };
 }
 
-export default async function InviteCodePage({
-  params,
-}: {
-  params: PageParams;
-}) {
+export default async function InviteCodePage({ params }: InviteCodePageProps) {
   const profile = await currentProfile();
 
   if (!profile) redirect("/sign-in");
-
   if (!params.inviteCode) redirect("/");
 
   const existingServer = await db.server.findFirst({
