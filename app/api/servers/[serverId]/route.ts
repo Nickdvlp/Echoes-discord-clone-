@@ -38,6 +38,7 @@ export async function DELETE(
 ) {
   try {
     const profile = await currentProfile();
+    const { serverId } = await params;
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 400 });
@@ -45,7 +46,7 @@ export async function DELETE(
 
     const server = await db.server.delete({
       where: {
-        id: params.serverId,
+        id: serverId,
         profileId: profile.id,
       },
     });

@@ -10,7 +10,7 @@ interface ServerIdLayoutProps {
 }
 const ServerIdLayout = async ({ children, params }: ServerIdLayoutProps) => {
   const profile = await currentProfile();
-  const serverId = params.serverId;
+  const { serverId } = await params;
 
   if (!profile) {
     redirect("/sign-in");

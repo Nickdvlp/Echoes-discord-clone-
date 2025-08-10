@@ -9,6 +9,7 @@ interface ServerIdPageProps {
 }
 const ServerIdPage = async ({ params }: ServerIdPageProps) => {
   const profile = await currentProfile();
+  const { serverId } = await params;
 
   if (!profile) {
     return redirect("/sign-in");
@@ -16,7 +17,7 @@ const ServerIdPage = async ({ params }: ServerIdPageProps) => {
 
   const server = await db.server.findUnique({
     where: {
-      id: params.serverId,
+      id: serverId,
       members: {
         some: {
           profileId: profile.id,
@@ -40,7 +41,7 @@ const ServerIdPage = async ({ params }: ServerIdPageProps) => {
   if (initialChannel?.name !== "general") {
     return null;
   }
-  return redirect(`/servers/${params.serverId}/channels/${initialChannel?.id}`);
+  return redirect(`/servers/${serverId}/channels/${initialChannel?.id}`);
 };
 
 export default ServerIdPage;
