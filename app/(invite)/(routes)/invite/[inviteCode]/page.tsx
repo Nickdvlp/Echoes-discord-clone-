@@ -3,18 +3,18 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
 export default async function InviteCodePage({
-  params,
+  inviteCode,
 }: {
-  params: { inviteCode: any };
+  inviteCode: { inviteCode: any };
 }) {
   const profile = await currentProfile();
 
   if (!profile) redirect("/sign-in");
-  if (!params.inviteCode) redirect("/");
+  if (!inviteCode.inviteCode) redirect("/");
 
   const existingServer = await db.server.findFirst({
     where: {
-      inviteCode: params.inviteCode,
+      inviteCode: inviteCode.inviteCode,
       members: {
         some: { profileId: profile.id },
       },
