@@ -9,7 +9,7 @@ export default async function InviteCodePage({
 }) {
   const profile = await currentProfile();
 
-  const { inviteCode } = await params;
+  const { inviteCode } = params;
   if (!profile) redirect("/sign-in");
   if (!inviteCode) redirect("/");
 
