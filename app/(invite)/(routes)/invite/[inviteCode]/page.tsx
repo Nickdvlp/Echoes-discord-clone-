@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 interface InviteCodePageProps {
   params: {
-    inviteCode: string;
+    inviteCode: string | any;
   };
 }
 
