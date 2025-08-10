@@ -4,9 +4,7 @@ import { redirect } from "next/navigation";
 
 export default async function InviteCodePage({
   params,
-}: {
-  params: { inviteCode: string };
-}) {
+}: Awaited<Promise<{ params: { inviteCode: string } }>>) {
   const profile = await currentProfile();
 
   if (!profile) redirect("/sign-in");
