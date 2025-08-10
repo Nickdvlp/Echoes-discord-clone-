@@ -2,13 +2,11 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-interface InviteCodePageProps {
-  params: {
-    inviteCode: string | any;
-  };
-}
-
-export default async function InviteCodePage({ params }: InviteCodePageProps) {
+export default async function InviteCodePage({
+  params,
+}: {
+  params: { inviteCode: string };
+}) {
   const profile = await currentProfile();
 
   if (!profile) redirect("/sign-in");
