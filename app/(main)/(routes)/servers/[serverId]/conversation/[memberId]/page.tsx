@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 type Props = {
   params: Promise<{ serverId: string; memberId: string }>;
   searchParams: {
-    video?: Promise<{ [key: string]: string | string[] | undefined }>;
+    video?: boolean;
   };
 };
 
