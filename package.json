@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.25.1",
-    "@emoji-mart/data": "^1.2.1",
-    "@emoji-mart/react": "^1.1.1",
     "@hookform/resolvers": "^5.1.1",
     "@livekit/components-react": "^2.9.14",
     "@livekit/components-styles": "^1.1.6",
