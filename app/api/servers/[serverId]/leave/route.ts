@@ -2,19 +2,23 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+interface ServerIdProps {
+  serverId: string;
+}
 export async function PATCH(
   req: Request,
-  { params }: { params: { serverId: string } }
+  context: { params: Promise<ServerIdProps> }
 ) {
   try {
     const profile = await currentProfile();
+    const { serverId } = await context.params;
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const server = await db.server.update({
       where: {
-        id: params.serverId,
+        id: serverId,
         profileId: {
           not: profile.id,
         },
