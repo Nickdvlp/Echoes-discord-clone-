@@ -12,49 +12,54 @@ interface MemberIdPageProps {
     memberId: string;
     serverId: string;
   };
-  searchParams?: {
-    video?: string; // ✅ searchParams are strings, not booleans
+  searchParams: {
+    video?: boolean;
   };
 }
 
 const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
   const profile = await currentProfile();
+  const { memberId, serverId } = await params;
 
-  if (!profile) return redirect("/sign-in");
+  if (!profile) {
+    return redirect("/sign-in");
+  }
 
   const currentMember = await db.member.findFirst({
     where: {
-      serverId: params.serverId,
+      serverId: serverId,
       profileId: profile.id,
     },
-    include: { profile: true },
+    include: {
+      profile: true,
+    },
   });
-
-  if (!currentMember) return redirect("/");
+  if (!currentMember) {
+    return redirect("/");
+  }
 
   const conversation = await getOrCreateConversation(
     currentMember.id,
-    params.memberId
+    memberId
   );
 
-  if (!conversation) return redirect(`/servers/${params.serverId}`);
-
+  if (!conversation) {
+    return redirect(`/servers/${params.serverId}`);
+  }
   const { memberOne, memberTwo } = conversation;
+
   const otherMember =
     memberOne.profileId === profile.id ? memberTwo : memberOne;
-
-  const isVideo = searchParams?.video === "true"; // ✅ safely cast to boolean
 
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
       <ChatHeader
         imageUrl={otherMember.profile.imageUrl}
         name={otherMember.profile.name}
-        serverId={params.serverId}
+        serverId={serverId}
         type="conversation"
       />
-
-      {!isVideo && (
+      {!searchParams.video && (
         <>
           <ChatMessages
             member={currentMember}
@@ -65,18 +70,22 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
             paramKey="conversationId"
             paramValue={conversation.id}
             socketUrl="/api/socket/direct-messages"
-            socketQuery={{ conversationId: conversation.id }}
+            socketQuery={{
+              conversationId: conversation.id,
+            }}
           />
           <ChatInput
             name={otherMember.profile.name}
             type="conversation"
             apiUrl="/api/socket/direct-messages"
-            query={{ conversationId: conversation.id }}
+            query={{
+              conversationId: conversation.id,
+            }}
           />
         </>
       )}
 
-      {isVideo && (
+      {searchParams.video && (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
       )}
     </div>
