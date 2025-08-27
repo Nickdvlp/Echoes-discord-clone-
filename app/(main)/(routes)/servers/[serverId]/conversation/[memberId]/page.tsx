@@ -8,15 +8,18 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
 type Props = {
-  params: Promise<{ serverId: string; memberId: string }>;
-  searchParams: {
+  params: {
+    serverId: string;
+    memberId: string;
+  };
+  searchParams?: {
     video?: string;
   };
 };
 
 const MemberIdPage = async ({ params, searchParams }: Props) => {
   const profile = await currentProfile();
-  const { memberId, serverId } = await params;
+  const { memberId, serverId } = params;
 
   if (!profile) {
     return redirect("/sign-in");
@@ -83,7 +86,7 @@ const MemberIdPage = async ({ params, searchParams }: Props) => {
         </>
       )}
 
-      {searchParams.video && (
+      {searchParams?.video && (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
       )}
     </div>
