@@ -3,9 +3,12 @@ import { db } from "@/lib/db";
 import { MemberRole } from "@/lib/generated/prisma";
 import { NextResponse } from "next/server";
 
+interface ChannelIdProps {
+  channelId: string;
+}
 export async function DELETE(
   req: Request,
-  context: { params: { channelId: string } }
+  context: { params: Promise<ChannelIdProps> }
 ) {
   try {
     const profile = await currentProfile();
