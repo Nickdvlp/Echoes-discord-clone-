@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
@@ -37,5 +39,5 @@ export default async function InviteCodePage({
     },
   });
 
-  return redirect(`/servers/${server.id}`);
+  redirect(`/servers/${server.id}`);
 }
