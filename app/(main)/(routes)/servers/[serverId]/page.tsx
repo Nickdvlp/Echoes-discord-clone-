@@ -3,9 +3,9 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
 interface ServerIdPageProps {
-  params: {
+  params: Promise<{
     serverId: string;
-  };
+  }>;
 }
 const ServerIdPage = async ({ params }: ServerIdPageProps) => {
   const profile = await currentProfile();
