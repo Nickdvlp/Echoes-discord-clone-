@@ -13,7 +13,7 @@ export async function DELETE(
   try {
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
-    const { params } = context;
+    const { channelId } = await context.params;
     const serverId = searchParams.get("serverId");
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -21,7 +21,7 @@ export async function DELETE(
     if (!serverId) {
       return new NextResponse("Server ID missing", { status: 401 });
     }
-    if (!params.channelId) {
+    if (!channelId) {
       return new NextResponse("Channel ID missing", { status: 401 });
     }
 
@@ -38,7 +38,7 @@ export async function DELETE(
       data: {
         channels: {
           delete: {
-            id: params.channelId,
+            id: channelId,
             name: {
               not: "general",
             },
@@ -56,7 +56,7 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Promise<ChannelIdProps> }
+  context: { params: Promise<ChannelIdProps> }
 ) {
   try {
     const profile = await currentProfile();
@@ -64,13 +64,15 @@ export async function PATCH(
     const { searchParams } = new URL(req.url);
     const serverId = searchParams.get("serverId");
 
+    const { channelId } = await context.params;
+
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     if (!serverId) {
       return new NextResponse("Server ID missing", { status: 401 });
     }
-    if (!params.channelId) {
+    if (!channelId) {
       return new NextResponse("Channel ID missing", { status: 401 });
     }
 
@@ -92,7 +94,7 @@ export async function PATCH(
         channels: {
           update: {
             where: {
-              id: params.channelId,
+              id: channelId,
               NOT: {
                 name: "general",
               },

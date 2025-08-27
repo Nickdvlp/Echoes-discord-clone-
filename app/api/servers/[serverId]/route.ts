@@ -2,13 +2,17 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+interface ServerIdProps {
+  serverId: string;
+}
 export async function PATCH(
   req: Request,
-  { params }: { params: { serverId: string } }
+  context: { params: Promise<ServerIdProps> }
 ) {
   try {
     const profile = await currentProfile();
     const { name, imageUrl } = await req.json();
+    const { serverId } = await context.params;
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 400 });
@@ -16,7 +20,7 @@ export async function PATCH(
 
     const server = await db.server.update({
       where: {
-        id: params.serverId,
+        id: serverId,
         profileId: profile.id,
       },
       data: {
@@ -34,11 +38,11 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { serverId: string } }
+  context: { params: Promise<ServerIdProps> }
 ) {
   try {
     const profile = await currentProfile();
-    const { serverId } = await params;
+    const { serverId } = await context.params;
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 400 });
