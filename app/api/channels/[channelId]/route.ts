@@ -5,11 +5,12 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { channelId: string } }
+  context: { params: { channelId: string } }
 ) {
   try {
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
+    const { params } = context;
     const serverId = searchParams.get("serverId");
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
