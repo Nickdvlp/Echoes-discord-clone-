@@ -5,11 +5,11 @@ import { redirect } from "next/navigation";
 export default async function InviteCodePage({
   params,
 }: {
-  params: { inviteCode: string };
+  params: Promise<{ inviteCode: string }>;
 }) {
   const profile = await currentProfile();
 
-  const { inviteCode } = params;
+  const { inviteCode } = await params;
   if (!profile) redirect("/sign-in");
   if (!inviteCode) redirect("/");
 
@@ -25,7 +25,7 @@ export default async function InviteCodePage({
   if (existingServer) redirect(`/servers/${existingServer.id}`);
 
   const server = await db.server.findFirst({
-    where: { inviteCode: params.inviteCode },
+    where: { inviteCode: inviteCode },
   });
 
   if (!server) redirect("/");
