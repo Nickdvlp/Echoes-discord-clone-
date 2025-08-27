@@ -8,10 +8,10 @@ import { ChannelType } from "@/lib/generated/prisma";
 import { redirect } from "next/navigation";
 
 interface ChannelIdPageProps {
-  params: {
+  params: Promise<{
     serverId: string;
     channelId: string;
-  };
+  }>;
 }
 
 const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
@@ -27,7 +27,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
       id: channelId,
     },
   });
-  console.log("Channel Id", channel);
+
   const member = await db.member.findFirst({
     where: {
       serverId: serverId,
