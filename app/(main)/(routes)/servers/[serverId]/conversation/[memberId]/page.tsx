@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 type Props = {
   params: Promise<{ serverId: string; memberId: string }>;
   searchParams: {
-    video?: boolean;
+    video?: string;
   };
 };
 
@@ -48,6 +48,7 @@ const MemberIdPage = async ({ params, searchParams }: Props) => {
   const otherMember =
     memberOne.profileId === profile.id ? memberTwo : memberOne;
 
+  const isVideo = searchParams?.video === "true"; // ✅ cast to boolean
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
       <ChatHeader
@@ -56,7 +57,7 @@ const MemberIdPage = async ({ params, searchParams }: Props) => {
         serverId={serverId}
         type="conversation"
       />
-      {!searchParams.video && (
+      {!isVideo && (
         <>
           <ChatMessages
             member={currentMember}
