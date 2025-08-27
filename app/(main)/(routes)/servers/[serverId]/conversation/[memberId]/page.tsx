@@ -7,17 +7,14 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-interface MemberIdPageProps {
-  params: {
-    memberId: string;
-    serverId: string;
-  };
+type Props = {
+  params: Promise<{ serverId: string; memberId: string }>;
   searchParams: {
-    video?: boolean;
+    video?: Promise<{ [key: string]: string | string[] | undefined }>;
   };
-}
+};
 
-const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
+const MemberIdPage = async ({ params, searchParams }: Props) => {
   const profile = await currentProfile();
   const { memberId, serverId } = await params;
 
@@ -44,7 +41,7 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
   );
 
   if (!conversation) {
-    return redirect(`/servers/${params.serverId}`);
+    return redirect(`/servers/${serverId}`);
   }
   const { memberOne, memberTwo } = conversation;
 
