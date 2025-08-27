@@ -8,18 +8,15 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
 type Props = {
-  params: {
-    serverId: string;
-    memberId: string;
-  };
-  searchParams?: {
+  params: Promise<{ serverId: string; memberId: string }>;
+  searchParams: Promise<{
     video?: string;
-  };
+  }>;
 };
 
 const MemberIdPage = async ({ params, searchParams }: Props) => {
   const profile = await currentProfile();
-  const { memberId, serverId } = params;
+  const { memberId, serverId } = await params;
 
   if (!profile) {
     return redirect("/sign-in");
@@ -51,7 +48,8 @@ const MemberIdPage = async ({ params, searchParams }: Props) => {
   const otherMember =
     memberOne.profileId === profile.id ? memberTwo : memberOne;
 
-  const isVideo = searchParams?.video === "true"; // ✅ cast to boolean
+  const resolvedSearchParams = await searchParams;
+  const isVideo = resolvedSearchParams?.video === "true"; // ✅ cast to boolean
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
       <ChatHeader
@@ -86,7 +84,7 @@ const MemberIdPage = async ({ params, searchParams }: Props) => {
         </>
       )}
 
-      {searchParams?.video && (
+      {resolvedSearchParams?.video && (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
       )}
     </div>
